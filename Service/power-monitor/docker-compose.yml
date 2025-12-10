@@ -1,0 +1,75 @@
+services:
+  backend:
+    build: ./backend
+    pull_policy: if_not_present
+    container_name: power-monitor-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./backend:/app
+    environment:
+      - DATABASE_PATH=/app/data/power_monitor.db
+      - POLL_INTERVAL=1.0
+      - LOG_LEVEL=INFO
+    networks:
+      - power-monitor-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    # ADD THESE RESOURCE LIMITS
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+    # ADD LOGGING LIMITS
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  frontend:
+    build: ./frontend
+    pull_policy: if_not_present
+    container_name: power-monitor-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - power-monitor-net
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+    # ADD THESE RESOURCE LIMITS
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.1'
+          memory: 64M
+    # ADD LOGGING LIMITS
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  power-monitor-net:
+    driver: bridge
+
+volumes:
+  data:
+    driver: local
