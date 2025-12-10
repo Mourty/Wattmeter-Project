@@ -1,0 +1,1 @@
+This is a repo for a class project. I have created a power meter using custom hardware. It can communicate its readings to a webserver for storage, processing, and presentation. I might update this repo after the class, but I might also leave it as is for anyone to mess with.
