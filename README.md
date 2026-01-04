@@ -1,6 +1,3 @@
-Wattmeter Readme
-========================
-
 # The Wattmeter Project
 
 This project was created for a senior design course as part of my degree path. I wanted to create a wattmeter similar to the "Kill A Watt" meters typically available, but with an important change. I wanted the ability to log the energy consumption data over time. I created a functional prototype well before I even began the class, but decided to iterate on the project and improve it. This is my first project of this scale, and I am sure it isn't perfect. In fact I'm sure it can be improved upon, but it works well enough for me.  
